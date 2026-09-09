@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFrameworks>net8.0;net9.0</TargetFrameworks>
+    <AssemblyName>StangaNetLib.ContentFlow</AssemblyName>
+    <RootNamespace>StangaNetLib.ContentFlow</RootNamespace>
+    <Description>Content lifecycle state machine for ASP.NET Core: Draftâ†’Pendingâ†’Approvedâ†’Publishedâ†’Revoked transitions with background scheduler for automatic publish and expiry.</Description>
+    <PackageTags>content;lifecycle;state-machine;workflow;cms;scheduling;stanganet</PackageTags>
+    <Version>1.0.0</Version>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="StangaNetLib.Core" VersionOverride="1.0.1" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
+    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" />
+    <PackageReference Include="Microsoft.Extensions.Options" />
+    <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="StangaNetLib.ContentFlow.Tests" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\README.md" Pack="true" PackagePath="\" />
+  </ItemGroup>
+</Project>
