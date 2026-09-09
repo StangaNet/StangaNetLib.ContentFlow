@@ -1,7 +1,7 @@
 # StangaNetLib.ContentFlow
 
 [![.NET CI](https://github.com/StangaNet/StangaNetLib.ContentFlow/actions/workflows/main.yml/badge.svg)](https://github.com/StangaNet/StangaNetLib.ContentFlow/actions/workflows/main.yml)
-![NuGet](https://img.shields.io/nuget/v/StangaNetLib.ContentFlow)
+![NuGet](https://img.shields.io/badge/nuget-1.0.0-blue)
 ![.NET](https://img.shields.io/badge/.NET-8.0%20%7C%209.0-512BD4)
 
 StangaNetLib.ContentFlow is a domain-driven lifecycle state machine for .NET. It provides a structured workflow for managing content items through lifecycle transitions (e.g., `Draft` → `Pending` → `Approved` → `Published` → `Revoked`), backed by an immutable audit trail and a background scheduler for automatic publishing and expiry.
@@ -41,10 +41,10 @@ The package is hosted on **GitHub Packages**.
 | :--- | :--- | :--- |
 | `StangaNetLib.ContentFlow.Workflow` | `IContentWorkflowService<T>`, `IContentScheduleProcessor` | Lifecycle state machine and scheduling logic. |
 | `StangaNetLib.ContentFlow.Content` | `IContentRepository<T>`, `ContentItem<T>`, `ContentState` | Domain models and persistence abstractions. |
-| `StangaNetLib.ContentFlow.Audit` | `IContentReviewLogRepository`, `ContentReviewLog` | Immutable audit trail for all transitions. |
+| `StangaNetLib.ContentFlow.Auditing` | `IContentReviewLogRepository`, `ContentReviewLog` | Immutable audit trail for all transitions. |
 | `StangaNetLib.ContentFlow.Configuration` | `ContentFlowSettings` | Configuration and validation logic. |
-| `StangaNetLib.ContentFlow.Common.Exceptions` | `ContentFlowErrors` | Structured domain error catalogue. |
-| `StangaNetLib.ContentFlow.Common.Extensions` | `ServiceCollectionExtensions` | Dependency Injection registration. |
+| `StangaNetLib.ContentFlow.Exceptions` | `ContentFlowErrors` | Structured domain error catalogue. |
+| `StangaNetLib.ContentFlow.Extensions` | `ServiceCollectionExtensions` | Dependency Injection registration. |
 
 ---
 
@@ -56,13 +56,12 @@ StangaNetLib.ContentFlow/
 │   └── StangaNetLib.ContentFlow.props  # MSBuild auto-import — injects AssemblyMetadata
 ├── src/
 │   └── StangaNetLib.ContentFlow/
-│       ├── Audit/          # IContentReviewLogRepository, ContentReviewLog
-│       ├── Common/         # Exceptions, Extensions
+│       ├── Auditing/       # IContentReviewLogRepository, ContentReviewLog
 │       ├── Configuration/  # ContentFlowSettings, ContentFlowSettingsValidator
 │       ├── Content/        # IContentRepository, ContentItem, ContentState, InMemoryContentRepository
-│       │       └── InMemory/
-│       ├── Workflow/       # IContentWorkflowService, ContentWorkflowService, ContentTransitionRules, etc.
-│       └── ...
+│       ├── Exceptions/     # ContentFlowErrors
+│       ├── Extensions/     # ServiceCollectionExtensions
+│       └── Workflow/       # IContentWorkflowService, ContentWorkflowService, ContentTransitionRules, etc.
 └── tests/
     └── StangaNetLib.ContentFlow.Tests/
 ```
