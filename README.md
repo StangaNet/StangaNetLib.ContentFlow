@@ -116,27 +116,8 @@ public class ArticleService
 
 ## State Machine
 
-```
-           ┌──────────────────────────────────┐
-           │             Revoke               │
-           ▼                                  │
-         Draft ──SubmitForReview──► Pending ──┤
-           ▲                         │        │
-           │        ◄──RequestRevision         │
-           │                         │        │
-           │                       Approve    │
-           │                         │        │
-           │                         ▼        │
-           ◄──────RequestRevision── Approved ──┤
-                                     │        │
-                              Publish│        │ Revoke
-                                     ▼        │
-                                  Published ──┘
-                                     │
-                                  Revoke
-                                     ▼
-                                  Revoked  (terminal)
-```
+![State Machine Schema](assets/state_machine.svg)
+
 
 | Transition | Method |
 | :--- | :--- |
