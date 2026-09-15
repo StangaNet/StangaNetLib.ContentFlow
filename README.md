@@ -1,7 +1,7 @@
 # StangaNetLib.ContentFlow
 
 [![.NET CI](https://github.com/StangaNet/StangaNetLib.ContentFlow/actions/workflows/main.yml/badge.svg)](https://github.com/StangaNet/StangaNetLib.ContentFlow/actions/workflows/main.yml)
-![NuGet](https://img.shields.io/badge/nuget-1.0.0-blue)
+![NuGet](https://img.shields.io/badge/nuget-1.0.1-blue)
 ![.NET](https://img.shields.io/badge/.NET-8.0%20%7C%209.0-512BD4)
 
 StangaNetLib.ContentFlow is a domain-driven lifecycle state machine for .NET. It provides a structured workflow for managing content items through lifecycle transitions (e.g., `Draft` → `Pending` → `Approved` → `Published` → `Revoked`), backed by an immutable audit trail and a background scheduler for automatic publishing and expiry.
@@ -28,7 +28,7 @@ The package is hosted on **GitHub Packages**.
 
 ```xml
 <!-- .csproj -->
-<PackageReference Include="StangaNetLib.ContentFlow" Version="1.0.0" />
+<PackageReference Include="StangaNetLib.ContentFlow" Version="1.0.1" />
 ```
 
 ---
