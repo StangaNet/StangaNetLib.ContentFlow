@@ -4,24 +4,24 @@
 ![NuGet](https://img.shields.io/badge/nuget-1.1.0-blue)
 ![.NET](https://img.shields.io/badge/.NET-8.0%20%7C%209.0-512BD4)
 
-StangaNetLib.ContentFlow is a domain-driven lifecycle state machine for .NET. It provides a structured workflow for managing content items through lifecycle transitions (e.g., `Draft` → `Pending` → `Approved` → `Published` → `Revoked`), backed by an immutable audit trail and a background scheduler for automatic publishing and expiry.
+Content lifecycle state machine for .NET: Draft → Pending → Approved → Published → Revoked, with an immutable review audit trail and a background scheduler for automatic publish/expiry. Built on [`StangaNetLib.Core`](https://github.com/StangaNet/StangaNetLib.Core) (`Result`, `Guard`).
 
 ## Design Philosophy
 
-- **Domain-Centric**: Organized around functional domains (Workflow, Content, Audit) rather than technical layers.
-- **Functional Error Handling**: Uses the `Result<T>` pattern to manage domain failures as data, avoiding exception-based control flow.
-- **Background Scheduling**: Integrated support for time-based state transitions via a managed background service.
-- **Modern Standards**: Fully optimized for .NET 8.0 and 9.0, utilizing modern C# features like `record` types and `TimeProvider`.
+- **Domain-centric**: Workflow, Content, and Audit as capabilities.
+- **Functional failures**: transitions return `Result` / `Result<T>`.
+- **Background scheduling**: time-based publish/expiry via a hosted service (supports Scoped stores).
+- **Modern .NET**: `net8.0` / `net9.0` with open generics and `TimeProvider`.
 
 ## Installation
 
-The package is hosted on **GitHub Packages**.
+The package is hosted on **GitHub Packages** (pulls Core from the same feed).
 
 ```xml
-<!-- NuGet.config — add the GitHub Packages source -->
+<!-- NuGet.config — source key must match your packageSourceCredentials -->
 <configuration>
   <packageSources>
-    <add key="github" value="https://nuget.pkg.github.com/StangaNet/index.json" />
+    <add key="StangaNet" value="https://nuget.pkg.github.com/StangaNet/index.json" />
   </packageSources>
 </configuration>
 ```
@@ -31,99 +31,55 @@ The package is hosted on **GitHub Packages**.
 <PackageReference Include="StangaNetLib.ContentFlow" Version="1.1.0" />
 ```
 
----
+See [CHANGELOG.md](./CHANGELOG.md) for release history.
 
 ## Core Components
 
-*The library is organized into functional namespaces. For implementation details, refer directly to the source code.*
-
-| Namespace | Core Components | Purpose |
-| :--- | :--- | :--- |
-| `StangaNetLib.ContentFlow.Workflow` | `IContentWorkflowService<T>`, `IContentScheduleProcessor` | Lifecycle state machine and scheduling logic. |
-| `StangaNetLib.ContentFlow.Content` | `IContentRepository<T>`, `ContentItem<T>`, `ContentState` | Domain models and persistence abstractions. |
-| `StangaNetLib.ContentFlow.Auditing` | `IContentReviewLogRepository`, `ContentReviewLog` | Immutable audit trail for all transitions. |
-| `StangaNetLib.ContentFlow.Configuration` | `ContentFlowSettings` | Configuration and validation logic. |
-| `StangaNetLib.ContentFlow.Exceptions` | `ContentFlowErrors` | Structured domain error catalogue. |
-| `StangaNetLib.ContentFlow.Extensions` | `ServiceCollectionExtensions` | Dependency Injection registration. |
-
----
+| Namespace | Components | Purpose |
+|---|---|---|
+| `StangaNetLib.ContentFlow.Workflow` | `IContentWorkflowService<T>`, scheduler | Transitions + scheduling |
+| `StangaNetLib.ContentFlow.Content` | `IContentRepository<T>`, `ContentItem<T>` | Persistence contracts |
+| `StangaNetLib.ContentFlow.Auditing` | `IContentReviewLogRepository` | Immutable review trail |
+| `StangaNetLib.ContentFlow.Configuration` | `ContentFlowSettings` | Options + validator |
+| `StangaNetLib.ContentFlow.Extensions` | `AddStangaNetLibContentFlow` | DI |
 
 ## Project Structure
 
 ```
 StangaNetLib.ContentFlow/
+├── assets/
+│   ├── package-icon.png
+│   └── state_machine.svg
 ├── build/
-│   └── StangaNetLib.ContentFlow.props  # MSBuild auto-import — injects AssemblyMetadata
+│   └── StangaNetLib.ContentFlow.props
 ├── src/
 │   └── StangaNetLib.ContentFlow/
-│       ├── Auditing/       # IContentReviewLogRepository, ContentReviewLog
-│       ├── Configuration/  # ContentFlowSettings, ContentFlowSettingsValidator
-│       ├── Content/        # IContentRepository, ContentItem, ContentState, InMemoryContentRepository
-│       ├── Exceptions/     # ContentFlowErrors
-│       ├── Extensions/     # ServiceCollectionExtensions
-│       └── Workflow/       # IContentWorkflowService, ContentWorkflowService, ContentTransitionRules, etc.
+│       ├── Auditing/
+│       ├── Configuration/
+│       ├── Content/
+│       ├── Exceptions/
+│       ├── Extensions/
+│       └── Workflow/
 └── tests/
     └── StangaNetLib.ContentFlow.Tests/
 ```
 
----
-
 ## Quick Start
-
-### Configuration
-Define your settings in `appsettings.json`:
-
-```json
-{
-  "ContentFlowSettings": {
-    "ScheduleCheckInterval": "00:00:30",
-    "SchedulerActorName": "system"
-  }
-}
-```
-
-### Registration
-Register the services in your `Program.cs`:
 
 ```csharp
 builder.Services.AddStangaNetLibContentFlow(builder.Configuration);
-
-// Enroll content types in the background scheduler:
 builder.Services.AddStangaNetLibContentFlowType<Article>();
-builder.Services.AddStangaNetLibContentFlowType<BlogPost>();
+
+// Optional: replace in-memory defaults with EF Core Scoped registrations
+// services.AddScoped<IContentRepository<Article>, EfArticleRepository>();
+// services.AddScoped<IContentUnitOfWork, EfContentUnitOfWork>();
 ```
 
-### Usage Example
+## CI/CD
 
-```csharp
-public class ArticleService
-{
-    private readonly IContentWorkflowService<Article> _workflow;
+On push/PR to `main` and `workflow_dispatch`, the shared StangaNet workflow:
 
-    public ArticleService(IContentWorkflowService<Article> workflow)
-        => _workflow = workflow;
-
-    public async Task<Result<ContentItem<Article>>> DraftAsync(Article article)
-        => await _workflow.CreateAsync(article);
-
-    public async Task<Result<ContentItem<Article>>> SubmitAsync(Guid id, string author)
-        => await _workflow.SubmitForReviewAsync(id, author);
-
-    public async Task<Result<ContentItem<Article>>> PublishAsync(Guid id, string editor)
-        => await _workflow.PublishAsync(id, editor);
-}
-```
-
-## State Machine
-
-![State Machine Schema](assets/state_machine.svg)
-
-
-| Transition | Method |
-| :--- | :--- |
-| Draft → Pending | `SubmitForReviewAsync` |
-| Pending → Approved | `ApproveAsync` |
-| Pending / Approved → Draft | `RequestRevisionAsync` |
-| Approved → Published | `PublishAsync` |
-| Approved → Published (future) | `SchedulePublishAsync` |
-| Any → Revoked | `RevokeAsync` |
+1. Restores, builds, and tests on .NET 8 and .NET 9
+2. Packs the NuGet package (with symbols)
+3. Publishes to GitHub Packages outside pull requests
+4. Uploads the `.nupkg` as a build artifact
