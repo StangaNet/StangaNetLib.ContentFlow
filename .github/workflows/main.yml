@@ -2,6 +2,10 @@ name: .NET CI
 
 on:
   workflow_dispatch:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -17,4 +21,7 @@ jobs:
     with:
       library-name: 'StangaNetLib.ContentFlow'
       artifact-name: 'stanganetlib-contentflow-nuget'
+      # Auth attaches GITHUB_TOKEN to the StangaNet source declared in nuget.config
+      needs-github-packages-source: true
+      publish: ${{ github.event_name != 'pull_request' }}
     secrets: inherit

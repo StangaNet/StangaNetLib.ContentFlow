@@ -1,3 +1,8 @@
-- @azure Rule - Use Azure Tools - When handling requests related to Azure, always use your tools.
-- @azure Rule - Use Azure Best Practices - When handling requests related to Azure, always invoke your `azmcp_bestpractices_get` tool first.
-- @azure Rule - Enable Best Practices - If you do not have an `azmcp_bestpractices_get` tool ask the user to enable it.
+# StangaNetLib.ContentFlow — Copilot instructions
+
+- Content lifecycle state machine: Draft → Pending → Approved → Published → Revoked, with audit trail and background scheduler.
+- Prefer `Result` / `Result<T>` and `Guard` from `StangaNetLib.Core` for expected failures / validation.
+- Keep public APIs documented (`///`) and open-generic (`IContentWorkflowService<T>`, `IContentRepository<T>`).
+- DI: `AddStangaNetLibContentFlow` + per-type `AddStangaNetLibContentFlowType<T>`; scheduler supports Scoped repositories via DI scopes.
+- Match existing naming, file-scoped namespaces, and EditorConfig / Roslyn conventions.
+- Tests use xUnit v3 + FluentAssertions; cover both `net8.0` and `net9.0` when changing shared behavior.
