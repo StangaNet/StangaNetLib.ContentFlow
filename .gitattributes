@@ -1,4 +1,4 @@
-## StangaNetLib.ContentFlow — line endings, diffs, and export rules
+## StangaNetLib.ContentFlow â€” line endings, diffs, and export rules
 ## Working tree and GitHub: LF. Matches .editorconfig end_of_line = lf.
 
 * text=auto eol=lf
@@ -50,7 +50,6 @@ docs/** linguist-documentation
 .gitignore      export-ignore
 .github/        export-ignore
 .editorconfig   export-ignore
-graphify-out/   export-ignore
 artifacts/      export-ignore
 TestResults/    export-ignore
 
