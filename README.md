@@ -1,7 +1,7 @@
 # StangaNetLib.ContentFlow
 
 [![.NET CI](https://github.com/StangaNet/StangaNetLib.ContentFlow/actions/workflows/main.yml/badge.svg)](https://github.com/StangaNet/StangaNetLib.ContentFlow/actions/workflows/main.yml)
-![NuGet](https://img.shields.io/badge/nuget-1.1.0-blue)
+![NuGet](https://img.shields.io/badge/nuget-1.1.1-blue)
 ![.NET](https://img.shields.io/badge/.NET-8.0%20%7C%209.0%20%7C%2010.0-512BD4)
 
 Content lifecycle state machine for .NET: Draft → Pending → Approved → Published → Revoked, with an immutable review audit trail and a background scheduler for automatic publish/expiry. Built on [`StangaNetLib.Core`](https://github.com/StangaNet/StangaNetLib.Core) (`Result`, `Guard`).
