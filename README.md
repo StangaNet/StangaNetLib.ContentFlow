@@ -2,7 +2,7 @@
 
 [![.NET CI](https://github.com/StangaNet/StangaNetLib.ContentFlow/actions/workflows/main.yml/badge.svg)](https://github.com/StangaNet/StangaNetLib.ContentFlow/actions/workflows/main.yml)
 ![NuGet](https://img.shields.io/badge/nuget-1.1.0-blue)
-![.NET](https://img.shields.io/badge/.NET-8.0%20%7C%209.0-512BD4)
+![.NET](https://img.shields.io/badge/.NET-8.0%20%7C%209.0%20%7C%2010.0-512BD4)
 
 Content lifecycle state machine for .NET: Draft → Pending → Approved → Published → Revoked, with an immutable review audit trail and a background scheduler for automatic publish/expiry. Built on [`StangaNetLib.Core`](https://github.com/StangaNet/StangaNetLib.Core) (`Result`, `Guard`).
 
@@ -11,7 +11,7 @@ Content lifecycle state machine for .NET: Draft → Pending → Approved → Pub
 - **Domain-centric**: Workflow, Content, and Audit as capabilities.
 - **Functional failures**: transitions return `Result` / `Result<T>`.
 - **Background scheduling**: time-based publish/expiry via a hosted service (supports Scoped stores).
-- **Modern .NET**: `net8.0` / `net9.0` with open generics and `TimeProvider`.
+- **Modern .NET**: `net8.0` / `net9.0` / `net10.0` with open generics and `TimeProvider`.
 
 ## Installation
 
